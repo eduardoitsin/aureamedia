@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aurea Media — Agencia de Marketing Digital</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── TOKENS ─────────────────────────────────────────────── */
+    :root {
+      --bg:          #07070f;
+      --bg2:         #0d0d1c;
+      --bg3:         #121224;
+      --accent:      #7c6ef5;
+      --accent-lt:   #a394f8;
+      --accent-glow: rgba(124,110,245,.28);
+      --sky:         #38bdf8;
+      --text:        #eef1ff;
+      --text2:       #8e9ab8;
+      --text3:       #3a4260;
+      --glass:       rgba(255,255,255,.042);
+      --glass-b:     rgba(255,255,255,.08);
+      --glass-hi:    rgba(255,255,255,.13);
+      --r-card:      20px;
+      --r-pill:      100px;
+    }
+
+    /* ── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+      line-height:1.65;
+    }
+    a { text-decoration:none; color:inherit; }
+    img { display:block; max-width:100%; }
+
+    ::-webkit-scrollbar { width:5px; }
+    ::-webkit-scrollbar-track { background:var(--bg); }
+    ::-webkit-scrollbar-thumb { background:var(--accent); border-radius:3px; }
+
+    /* ── CURSOR AURA ────────────────────────────────────────── */
+    #cursor-aura {
+      position:fixed; pointer-events:none; z-index:0;
+      width:420px; height:420px; border-radius:50%;
+      background:radial-gradient(circle, rgba(124,110,245,.07) 0%, transparent 70%);
+      transform:translate(-50%,-50%);
+      transition:left .12s ease, top .12s ease;
+    }
+
+    /* ── LIQUID-GLASS BUTTONS ───────────────────────────────── */
+    .btn {
+      display:inline-flex; align-items:center; gap:8px;
+      padding:13px 30px; border-radius:var(--r-pill);
+      border:1px solid var(--glass-b);
+      background:var(--glass);
+      backdrop-filter:blur(24px) saturate(160%);
+      -webkit-backdrop-filter:blur(24px) saturate(160%);
+      color:var(--text); font-family:'Inter',sans-serif;
+      font-size:.875rem; font-weight:600;
+      cursor:pointer; position:relative; overflow:hidden;
+      transition:all .3s ease;
+    }
+    /* top sheen */
+    .btn::before {
+      content:'';
+      position:absolute; inset:0;
+      background:linear-gradient(to bottom, var(--glass-hi) 0%, transparent 55%);
+      border-radius:inherit; pointer-events:none;
+    }
+    /* inner glow rim */
+    .btn::after {
+      content:'';
+      position:absolute; inset:0;
+      border-radius:inherit;
+      box-shadow:inset 0 1px 0 var(--glass-hi), inset 0 -1px 0 rgba(0,0,0,.3);
+      pointer-events:none;
+    }
+    .btn:hover {
+      border-color:rgba(255,255,255,.18);
+      background:rgba(255,255,255,.075);
+      transform:translateY(-2px);
+      box-shadow:0 10px 36px rgba(124,110,245,.18);
+    }
+    .btn-primary {
+      background:linear-gradient(135deg, var(--accent) 0%, var(--accent-lt) 100%);
+      border-color:rgba(124,110,245,.45);
+      box-shadow:0 4px 24px rgba(124,110,245,.28);
+    }
+    .btn-primary:hover {
+      box-shadow:0 10px 48px rgba(124,110,245,.45);
+      background:linear-gradient(135deg,#8b7ef7 0%,#b8a9fa 100%);
+    }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    #nav {
+      position:fixed; inset:0 0 auto 0; z-index:900;
+      padding:22px 56px;
+      display:flex; align-items:center; justify-content:space-between;
+      transition:all .4s ease;
+    }
+    #nav.stuck {
+      padding:14px 56px;
+      background:rgba(7,7,15,.82);
+      backdrop-filter:blur(28px) saturate(160%);
+      -webkit-backdrop-filter:blur(28px) saturate(160%);
+      border-bottom:1px solid var(--glass-b);
+    }
+    .nav-logo {
+      font-family:'Syne',sans-serif; font-size:1.45rem; font-weight:800;
+      letter-spacing:-.03em;
+      background:linear-gradient(120deg,var(--text) 0%,var(--accent-lt) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .nav-links {
+      display:flex; gap:36px; list-style:none;
+    }
+    .nav-links a {
+      font-size:.875rem; font-weight:500; color:var(--text2);
+      transition:color .25s;
+    }
+    .nav-links a:hover { color:var(--text); }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    #hero {
+      min-height:100vh; display:flex; align-items:center;
+      justify-content:center; padding:130px 48px 100px;
+      position:relative; overflow:hidden;
+    }
+    /* background orbs */
+    .orb {
+      position:absolute; border-radius:50%; filter:blur(90px);
+      pointer-events:none;
+    }
+    .orb-1 { width:700px;height:700px; background:radial-gradient(circle,#5040d8,transparent); top:-180px;right:-80px; opacity:.32; }
+    .orb-2 { width:440px;height:440px; background:radial-gradient(circle,#38bdf8,transparent); bottom:-40px;left:8%; opacity:.18; }
+    .orb-3 { width:320px;height:320px; background:radial-gradient(circle,#a78bfa,transparent); top:38%;left:22%; opacity:.13; }
+    /* grid */
+    .hero-grid {
+      position:absolute; inset:0; pointer-events:none;
+      background-image:
+        linear-gradient(rgba(255,255,255,.028) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.028) 1px,transparent 1px);
+      background-size:64px 64px;
+      mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent);
+      -webkit-mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black,transparent);
+    }
+    .hero-inner {
+      position:relative; z-index:1;
+      max-width:860px; text-align:center;
+    }
+    /* animated badge */
+    .badge {
+      display:inline-flex; align-items:center; gap:9px;
+      padding:8px 22px; border-radius:var(--r-pill);
+      border:1px solid var(--glass-b); background:var(--glass);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      font-size:.78rem; font-weight:500; color:var(--text2);
+      letter-spacing:.07em; text-transform:uppercase;
+      margin-bottom:34px;
+    }
+    .badge-dot {
+      width:7px; height:7px; border-radius:50%;
+      background:var(--accent-lt);
+      box-shadow:0 0 10px var(--accent-lt);
+      animation:pulse 2.4s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.45; transform:scale(.75); }
+    }
+    .hero-title {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(3rem,7.5vw,6.4rem);
+      font-weight:800; line-height:1.04;
+      letter-spacing:-.04em; margin-bottom:28px;
+    }
+    .gr {
+      background:linear-gradient(130deg, var(--text) 0%, var(--accent-lt) 46%, var(--sky) 100%);
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero-sub {
+      font-size:1.1rem; color:var(--text2); max-width:520px;
+      margin:0 auto 50px; font-weight:400; line-height:1.8;
+    }
+    .hero-cta { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+    /* scroll indicator */
+    .scroll-hint {
+      position:absolute; bottom:38px; left:50%; transform:translateX(-50%);
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      color:var(--text3); font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+    }
+    .scroll-line {
+      width:1px; height:44px;
+      background:linear-gradient(to bottom, var(--accent), transparent);
+      animation:scrollLine 2.2s ease-in-out infinite;
+    }
+    @keyframes scrollLine {
+      0%   { opacity:0; transform:scaleY(0); transform-origin:top; }
+      45%  { opacity:1; transform:scaleY(1); }
+      100% { opacity:0; transform:scaleY(1); transform-origin:bottom; }
+    }
+
+    /* ── LAYOUT HELPERS ─────────────────────────────────────── */
+    .wrap { max-width:1180px; margin:0 auto; }
+    section { padding:108px 48px; position:relative; }
+    .sec-header { text-align:center; margin-bottom:76px; }
+    .sec-tag {
+      display:inline-block; padding:6px 18px; border-radius:var(--r-pill);
+      border:1px solid rgba(124,110,245,.32);
+      background:rgba(124,110,245,.08);
+      color:var(--accent-lt); font-size:.76rem; font-weight:600;
+      letter-spacing:.1em; text-transform:uppercase; margin-bottom:22px;
+    }
+    .sec-title {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(1.9rem,3.8vw,3.1rem);
+      font-weight:800; letter-spacing:-.03em; line-height:1.1;
+      margin-bottom:18px;
+    }
+    .sec-sub {
+      color:var(--text2); font-size:1rem;
+      max-width:520px; margin:0 auto; line-height:1.8;
+    }
+
+    /* ── STATS ──────────────────────────────────────────────── */
+    #stats { padding:0 48px 108px; }
+    .stats-row {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:2px;
+    }
+    .stat {
+      text-align:center; padding:52px 28px;
+      border:1px solid var(--glass-b); background:var(--glass);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      position:relative; overflow:hidden;
+    }
+    .stat::before {
+      content:'';
+      position:absolute; top:0;left:0;right:0; height:1px;
+      background:linear-gradient(90deg,transparent,var(--glass-hi),transparent);
+    }
+    .stat:first-child { border-radius:var(--r-card) 0 0 var(--r-card); }
+    .stat:last-child  { border-radius:0 var(--r-card) var(--r-card) 0; }
+    .stat-n {
+      font-family:'Syne',sans-serif; font-size:2.9rem; font-weight:800;
+      letter-spacing:-.04em; line-height:1;
+      background:linear-gradient(130deg,var(--text),var(--accent-lt));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin-bottom:8px;
+    }
+    .stat-l { color:var(--text2); font-size:.85rem; font-weight:500; }
+
+    /* ── SERVICES ───────────────────────────────────────────── */
+    #services { background:var(--bg2); }
+    .svc-grid {
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:22px;
+    }
+    .svc-card {
+      padding:38px 34px; border-radius:var(--r-card);
+      border:1px solid var(--glass-b); background:var(--glass);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      position:relative; overflow:hidden;
+      transition:transform .4s ease, border-color .4s ease, box-shadow .4s ease, background .4s ease;
+    }
+    .svc-card::before {
+      content:'';
+      position:absolute; top:0;left:0;right:0; height:1px;
+      background:linear-gradient(90deg,transparent,var(--glass-hi),transparent);
+    }
+    /* inner glass sheen on hover */
+    .svc-card::after {
+      content:'';
+      position:absolute; inset:0; border-radius:inherit;
+      background:radial-gradient(circle at 30% 10%, rgba(124,110,245,.07), transparent 60%);
+      opacity:0; transition:opacity .4s ease;
+    }
+    .svc-card:hover { transform:translateY(-5px); border-color:rgba(124,110,245,.32); box-shadow:0 22px 56px rgba(124,110,245,.12); }
+    .svc-card:hover::after { opacity:1; }
+    .svc-icon {
+      width:50px; height:50px; border-radius:14px; font-size:1.3rem;
+      display:flex; align-items:center; justify-content:center;
+      background:linear-gradient(135deg,rgba(124,110,245,.2),rgba(167,148,248,.08));
+      border:1px solid rgba(124,110,245,.22);
+      margin-bottom:24px;
+      transition:transform .3s ease, box-shadow .3s ease;
+    }
+    .svc-card:hover .svc-icon { transform:scale(1.1); box-shadow:0 8px 28px var(--accent-glow); }
+    .svc-name {
+      font-family:'Syne',sans-serif; font-size:1.15rem; font-weight:700;
+      letter-spacing:-.02em; margin-bottom:12px;
+    }
+    .svc-desc { color:var(--text2); font-size:.875rem; line-height:1.72; }
+    .svc-pills { display:flex; flex-wrap:wrap; gap:7px; margin-top:20px; }
+    .pill {
+      padding:4px 12px; border-radius:var(--r-pill); font-size:.72rem;
+      background:rgba(255,255,255,.04); border:1px solid var(--glass-b);
+      color:var(--text2);
+    }
+
+    /* ── PROCESS ────────────────────────────────────────────── */
+    #process { background:var(--bg2); }
+    .steps {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:28px;
+      position:relative;
+    }
+    .steps::before {
+      content:'';
+      position:absolute; top:31px; left:12%; right:12%; height:1px;
+      background:linear-gradient(90deg,transparent,var(--glass-b),rgba(124,110,245,.3),var(--glass-b),transparent);
+    }
+    .step { text-align:center; padding:0 14px; }
+    .step-num {
+      width:62px; height:62px; border-radius:50%;
+      border:1px solid var(--glass-b); background:var(--glass);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 28px;
+      font-family:'Syne',sans-serif; font-size:1.05rem; font-weight:700;
+      color:var(--accent-lt); position:relative;
+    }
+    .step-num::after {
+      content:'';
+      position:absolute; inset:-4px; border-radius:50%;
+      border:1px solid rgba(124,110,245,.18);
+    }
+    .step-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; letter-spacing:-.02em; margin-bottom:11px; }
+    .step-desc  { color:var(--text2); font-size:.845rem; line-height:1.68; }
+
+    /* ── PORTFOLIO ──────────────────────────────────────────── */
+    #portfolio { background:var(--bg); }
+    .pf-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+    }
+    .pf-card {
+      border-radius:16px; overflow:hidden;
+      border:1px solid var(--glass-b); background:var(--bg3);
+      aspect-ratio:9/16; position:relative; cursor:pointer;
+      transition:transform .45s ease, border-color .45s ease, box-shadow .45s ease;
+    }
+    .pf-card:hover {
+      transform:translateY(-7px) scale(1.015);
+      border-color:rgba(124,110,245,.38);
+      box-shadow:0 28px 64px rgba(0,0,0,.55), 0 0 0 1px rgba(124,110,245,.12);
+    }
+    .pf-card iframe { width:100%; height:100%; border:none; }
+    .pf-placeholder {
+      width:100%; height:100%;
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:16px;
+      background:linear-gradient(160deg,var(--bg3),var(--bg2));
+    }
+    .pf-play {
+      width:58px; height:58px; border-radius:50%;
+      border:1px solid var(--glass-b); background:var(--glass);
+      backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem; color:var(--text2);
+      transition:all .3s ease;
+    }
+    .pf-card:hover .pf-play {
+      background:rgba(124,110,245,.22); border-color:rgba(124,110,245,.5);
+      color:var(--text); transform:scale(1.12);
+    }
+    .pf-lbl { font-size:.75rem; color:var(--text3); font-weight:500; }
+
+    /* ── VIDEO CARDS ────────────────────────────────────────── */
+    .pf-card video {
+      width:100%; height:100%; object-fit:cover; display:block;
+      border-radius:inherit;
+    }
+    .pf-overlay {
+      position:absolute; inset:0; border-radius:inherit;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:14px;
+      background:rgba(7,7,15,.38);
+      backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px);
+      transition:opacity .4s ease, backdrop-filter .4s ease;
+    }
+    .pf-card:hover .pf-overlay { opacity:0; }
+
+    /* ── CTA ────────────────────────────────────────────────── */
+    #cta { padding:130px 48px; text-align:center; position:relative; overflow:hidden; }
+    .cta-orb {
+      position:absolute; width:900px; height:900px; border-radius:50%;
+      background:radial-gradient(circle,rgba(124,110,245,.07) 0%,transparent 70%);
+      top:50%; left:50%; transform:translate(-50%,-50%);
+      pointer-events:none;
+    }
+    .cta-box {
+      position:relative; z-index:1; max-width:740px; margin:0 auto;
+      padding:76px 80px; border-radius:28px;
+      border:1px solid var(--glass-b); background:var(--glass);
+      backdrop-filter:blur(28px) saturate(160%);
+      -webkit-backdrop-filter:blur(28px) saturate(160%);
+      overflow:hidden;
+    }
+    .cta-box::before {
+      content:'';
+      position:absolute; top:0;left:0;right:0; height:1px;
+      background:linear-gradient(90deg,transparent,var(--glass-hi),transparent);
+    }
+    .cta-box::after {
+      content:'';
+      position:absolute; bottom:-220px; left:50%; transform:translateX(-50%);
+      width:460px; height:460px; border-radius:50%;
+      background:radial-gradient(circle,rgba(124,110,245,.1),transparent 70%);
+      pointer-events:none;
+    }
+    .cta-title {
+      font-family:'Syne',sans-serif;
+      font-size:clamp(1.9rem,3.8vw,3rem);
+      font-weight:800; letter-spacing:-.03em; line-height:1.1;
+      margin-bottom:18px;
+    }
+    .cta-sub {
+      color:var(--text2); font-size:1rem; line-height:1.8;
+      margin:0 auto 42px; max-width:440px;
+    }
+
+    /* ── FOOTER ─────────────────────────────────────────────── */
+    footer {
+      padding:64px 48px 40px;
+      border-top:1px solid var(--glass-b); background:var(--bg2);
+    }
+    .ft-top {
+      display:flex; justify-content:space-between; align-items:flex-start;
+      margin-bottom:56px;
+    }
+    .ft-logo {
+      font-family:'Syne',sans-serif; font-size:1.45rem; font-weight:800;
+      background:linear-gradient(120deg,var(--text),var(--accent-lt));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      background-clip:text; margin-bottom:10px;
+    }
+    .ft-tag { color:var(--text3); font-size:.82rem; }
+    .ft-cols { display:flex; gap:64px; }
+    .ft-col h5 {
+      font-size:.76rem; font-weight:600; letter-spacing:.1em;
+      text-transform:uppercase; color:var(--text); margin-bottom:20px;
+    }
+    .ft-col ul { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .ft-col a { color:var(--text3); font-size:.845rem; transition:color .25s; }
+    .ft-col a:hover { color:var(--text2); }
+    .ft-bot {
+      display:flex; justify-content:space-between; align-items:center;
+      padding-top:30px; border-top:1px solid var(--glass-b);
+    }
+    .ft-copy { color:var(--text3); font-size:.78rem; }
+    .socials { display:flex; gap:12px; }
+    .soc {
+      width:36px; height:36px; border-radius:10px;
+      border:1px solid var(--glass-b); background:var(--glass);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--text2); font-size:.8rem; font-weight:700;
+      transition:all .3s ease;
+    }
+    .soc:hover { border-color:rgba(124,110,245,.4); color:var(--text); background:rgba(124,110,245,.1); }
+
+    /* ── SCROLL ANIMATIONS ──────────────────────────────────── */
+    .reveal {
+      opacity:0; transform:translateY(36px);
+      transition:opacity .75s ease, transform .75s ease;
+    }
+    .reveal.in { opacity:1; transform:translateY(0); }
+    .d1 { transition-delay:.08s; } .d2 { transition-delay:.16s; }
+    .d3 { transition-delay:.24s; } .d4 { transition-delay:.32s; }
+    .d5 { transition-delay:.40s; } .d6 { transition-delay:.48s; }
+
+    /* ── HERO ENTRY ANIMATIONS ──────────────────────────────── */
+    @keyframes heroIn {
+      from { opacity:0; transform:translateY(28px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .hero-inner .badge        { animation:heroIn .8s ease .15s both; }
+    .hero-inner .hero-title   { animation:heroIn .8s ease .35s both; }
+    .hero-inner .hero-sub     { animation:heroIn .8s ease .55s both; }
+    .hero-inner .hero-cta     { animation:heroIn .8s ease .72s both; }
+    .hero .scroll-hint        { animation:heroIn .8s ease 1.1s both; }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+    @media(max-width:1024px) {
+      .svc-grid { grid-template-columns:repeat(2,1fr); }
+      .pf-grid  { grid-template-columns:repeat(2,1fr); }
+      .steps    { grid-template-columns:repeat(2,1fr); }
+      .steps::before { display:none; }
+    }
+    @media(max-width:768px) {
+      #nav,#nav.stuck { padding:14px 22px; }
+      .nav-links       { display:none; }
+      section          { padding:76px 22px; }
+      #hero            { padding:110px 22px 90px; }
+      #stats           { padding:0 22px 76px; }
+      .stats-row       { grid-template-columns:repeat(2,1fr); gap:2px; }
+      .stat:first-child  { border-radius:var(--r-card) 0 0 0; }
+      .stat:nth-child(2) { border-radius:0 var(--r-card) 0 0; }
+      .stat:nth-child(3) { border-radius:0 0 0 var(--r-card); }
+      .stat:last-child   { border-radius:0 0 var(--r-card) 0; }
+      .svc-grid  { grid-template-columns:1fr; }
+      .pf-grid   { grid-template-columns:1fr; }
+      .steps     { grid-template-columns:1fr; }
+      .cta-box   { padding:48px 28px; }
+      .ft-top    { flex-direction:column; gap:36px; }
+      .ft-cols   { flex-direction:column; gap:28px; }
+      .ft-bot    { flex-direction:column; gap:16px; text-align:center; }
+      .pf-card   { max-width:320px; margin:0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Cursor aura -->
+<div id="cursor-aura"></div>
+
+<!-- ═══════════════════════════ NAV ══════════════════════════════ -->
+<nav id="nav">
+  <div class="nav-logo">Aurea Media</div>
+  <ul class="nav-links">
+    <li><a href="#services">Servicios</a></li>
+    <li><a href="#process">Proceso</a></li>
+    <li><a href="#portfolio">Portafolio</a></li>
+    <li><a href="https://wa.me/message/GZQT5ZVQUQOWP1" target="_blank" rel="noopener">Contacto</a></li>
+  </ul>
+  <a href="https://wa.me/message/GZQT5ZVQUQOWP1" target="_blank" rel="noopener" class="btn btn-primary">Agendar reunión</a>
+</nav>
+
+<!-- ═══════════════════════════ HERO ═════════════════════════════ -->
+<section id="hero">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-inner">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Agencia de Marketing Digital
+    </div>
+    <h1 class="hero-title">
+      Estrategia que<br><span class="gr">convierte.</span>
+    </h1>
+    <p class="hero-sub">
+      Potenciamos marcas a través de contenido visual estratégico, gestión de redes y publicidad que genera resultados reales y medibles.
+    </p>
+    <div class="hero-cta">
+      <a href="https://wa.me/message/GZQT5ZVQUQOWP1" target="_blank" rel="noopener" class="btn btn-primary">Agendar una reunión gratuita</a>
+      <a href="#portfolio" class="btn">Ver portafolio &darr;</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ STATS ════════════════════════════ -->
+<section id="stats">
+  <div class="wrap">
+    <div class="stats-row">
+      <div class="stat reveal"><div class="stat-n">50+</div><div class="stat-l">Clientes activos</div></div>
+      <div class="stat reveal d1"><div class="stat-n">3M+</div><div class="stat-l">Impresiones generadas</div></div>
+      <div class="stat reveal d2"><div class="stat-n">200+</div><div class="stat-l">Proyectos completados</div></div>
+      <div class="stat reveal d3"><div class="stat-n">98%</div><div class="stat-l">Satisfacción de clientes</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ SERVICES ═════════════════════════ -->
+<section id="services">
+  <div class="wrap">
+    <div class="sec-header">
+      <div class="sec-tag reveal">Lo que hacemos</div>
+      <h2 class="sec-title reveal d1">Servicios diseñados<br>para crecer</h2>
+      <p class="sec-sub reveal d2">Cada servicio está pensado para construir presencia, generar engagement y convertir audiencias en clientes.</p>
+    </div>
+    <div class="svc-grid">
+
+      <div class="svc-card reveal">
+        <div class="svc-icon">📱</div>
+        <div class="svc-name">Manejo de Redes Sociales</div>
+        <div class="svc-desc">Gestionamos tus perfiles de forma estratégica y consistente. Planificación de contenido, gestión de comunidad y análisis de métricas para que tu marca siempre esté activa y creciendo.</div>
+        <div class="svc-pills">
+          <span class="pill">Instagram</span><span class="pill">TikTok</span>
+          <span class="pill">LinkedIn</span><span class="pill">Facebook</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal d1">
+        <div class="svc-icon">🎬</div>
+        <div class="svc-name">Creación de Contenido</div>
+        <div class="svc-desc">Producimos contenido que conecta: videos, fotos, stories, carruseles y más. Cada pieza diseñada para tu audiencia y alineada con la voz y estética de tu marca.</div>
+        <div class="svc-pills">
+          <span class="pill">Video</span><span class="pill">Fotografía</span>
+          <span class="pill">Copywriting</span><span class="pill">Diseño</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal d2">
+        <div class="svc-icon">✂️</div>
+        <div class="svc-name">Edición de Video & Reels</div>
+        <div class="svc-desc">Transformamos tu material en contenido que detiene el scroll. Reels con ritmo, narrativa y estética que representan tu marca al más alto nivel en cualquier plataforma.</div>
+        <div class="svc-pills">
+          <span class="pill">Reels</span><span class="pill">Short-form</span>
+          <span class="pill">Motion Graphics</span><span class="pill">Transiciones</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal d3">
+        <div class="svc-icon">📊</div>
+        <div class="svc-name">Paid Media</div>
+        <div class="svc-desc">Maximizamos tu inversión publicitaria con campañas segmentadas y optimizadas. Datos que guían cada decisión para que cada peso invertido trabaje al máximo.</div>
+        <div class="svc-pills">
+          <span class="pill">Meta Ads</span><span class="pill">Google Ads</span>
+          <span class="pill">TikTok Ads</span><span class="pill">Retargeting</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal d4">
+        <div class="svc-icon">🧭</div>
+        <div class="svc-name">Estrategia Digital</div>
+        <div class="svc-desc">Diseñamos la hoja de ruta de tu marca en digital. Análisis de competencia, definición de audiencia, posicionamiento y KPIs claros para medir el éxito real.</div>
+        <div class="svc-pills">
+          <span class="pill">Análisis</span><span class="pill">Benchmarking</span>
+          <span class="pill">Roadmap</span><span class="pill">KPIs</span>
+        </div>
+      </div>
+
+      <div class="svc-card reveal d5">
+        <div class="svc-icon">💎</div>
+        <div class="svc-name">Branding & Identidad</div>
+        <div class="svc-desc">Construimos y fortalecemos la identidad visual y verbal de tu marca para que comunique con claridad, coherencia y carácter en todos los canales y puntos de contacto.</div>
+        <div class="svc-pills">
+          <span class="pill">Identidad visual</span><span class="pill">Tono de voz</span>
+          <span class="pill">Brand guidelines</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PROCESS ══════════════════════════ -->
+<section id="process">
+  <div class="wrap">
+    <div class="sec-header">
+      <div class="sec-tag reveal">Cómo trabajamos</div>
+      <h2 class="sec-title reveal d1">Un proceso claro<br>desde el día uno</h2>
+      <p class="sec-sub reveal d2">Sin sorpresas. Cada proyecto sigue un flujo estructurado para que siempre sepas en qué punto estamos y qué viene después.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Reunión de Diagnóstico</div>
+        <div class="step-desc">Entendemos tu negocio, objetivos, audiencia y situación actual. Sin compromiso, sin precios todavía — solo escuchamos.</div>
+      </div>
+      <div class="step reveal d1">
+        <div class="step-num">02</div>
+        <div class="step-title">Estrategia Personalizada</div>
+        <div class="step-desc">Diseñamos un plan a medida según tus metas y el potencial real de tu marca. Nada genérico.</div>
+      </div>
+      <div class="step reveal d2">
+        <div class="step-num">03</div>
+        <div class="step-title">Producción & Ejecución</div>
+        <div class="step-desc">Nuestro equipo entra en acción. Contenido, campañas, gestión — todo lo que definimos en la estrategia.</div>
+      </div>
+      <div class="step reveal d3">
+        <div class="step-num">04</div>
+        <div class="step-title">Reportes & Optimización</div>
+        <div class="step-desc">Medimos cada resultado y ajustamos en tiempo real para maximizar el rendimiento de forma continua.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ PORTFOLIO ════════════════════════ -->
+<section id="portfolio">
+  <div class="wrap">
+    <div class="sec-header">
+      <div class="sec-tag reveal">Portafolio</div>
+      <h2 class="sec-title reveal d1">Reels que<br>generan impacto</h2>
+      <p class="sec-sub reveal d2">Una muestra de nuestro trabajo. Cada video es una historia contada con intención, ritmo y estética.</p>
+    </div>
+    <div class="pf-grid">
+
+      <div class="pf-card reveal">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Aurea%20Media.mov" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Aurea Media</div></div>
+      </div>
+
+      <div class="pf-card reveal d1">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Aurea%20Media%202.mov" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Aurea Media 2</div></div>
+      </div>
+
+      <div class="pf-card reveal d2">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Aurea%20Media%203.mov" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Aurea Media 3</div></div>
+      </div>
+
+      <div class="pf-card reveal d3">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Demo%20reel%20.mov" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Demo Reel</div></div>
+      </div>
+
+      <div class="pf-card reveal d4">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Daniel%20Kish%20-%20Nas.io.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Daniel Kish</div></div>
+      </div>
+
+      <div class="pf-card reveal d5">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Dr.%20Luis%20-%20Itsin%20(1).MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Dr. Luis · Vol. 1</div></div>
+      </div>
+
+      <div class="pf-card reveal">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Dr.%20Luis%20-%20Itsin%20(2).MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Dr. Luis · Vol. 2</div></div>
+      </div>
+
+      <div class="pf-card reveal d1">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Dr.%20Luis%20-%20Itsin%20(3).MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Dr. Luis · Vol. 3</div></div>
+      </div>
+
+      <div class="pf-card reveal d2">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Dr.%20Luis%20-%20Itsin%20(4).MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Dr. Luis · Vol. 4</div></div>
+      </div>
+
+      <div class="pf-card reveal d3">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Escuela%20de%20Idiomas%20-%20Itsin.MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Escuela de Idiomas</div></div>
+      </div>
+
+      <div class="pf-card reveal d4">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/Escuela%20de%20Idiomas%20-%20Itsin%202.MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">Escuela de Idiomas 2</div></div>
+      </div>
+
+      <div class="pf-card reveal d5">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/SalesCode%20-%20Itsin.MP4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">SalesCode</div></div>
+      </div>
+
+      <div class="pf-card reveal">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/San%20Marcos%20-%20Itsin.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">San Marcos</div></div>
+      </div>
+
+      <div class="pf-card reveal d1">
+        <video src="file:///E:/Itsin%20Laptop/2026/Nueva%20carpeta/VLOG%20ITSIN%20-%20Dia%201.mp4" muted loop playsinline preload="metadata"></video>
+        <div class="pf-overlay"><div class="pf-play">▶</div><div class="pf-lbl">VLOG · Día 1</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ CTA ══════════════════════════════ -->
+<section id="cta">
+  <div class="cta-orb"></div>
+  <div class="wrap">
+    <div class="cta-box reveal">
+      <div class="sec-tag" style="margin-bottom:22px;">¿Listo para crecer?</div>
+      <h2 class="cta-title">Tu siguiente paso<br>comienza aquí</h2>
+      <p class="cta-sub">Agenda una reunión gratuita. Sin compromisos. Analizamos tu situación juntos y vemos exactamente cómo podemos ayudarte a crecer.</p>
+      <a href="https://wa.me/message/GZQT5ZVQUQOWP1" target="_blank" rel="noopener" class="btn btn-primary" style="font-size:.95rem;padding:16px 44px;">
+        Agendar reunión gratuita &rarr;
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════ FOOTER ═══════════════════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="ft-top">
+      <div>
+        <div class="ft-logo">Aurea Media</div>
+        <div class="ft-tag">Estrategia · Contenido · Resultados</div>
+      </div>
+      <div class="ft-cols">
+        <div class="ft-col">
+          <h5>Servicios</h5>
+          <ul>
+            <li><a href="#services">Redes Sociales</a></li>
+            <li><a href="#services">Creación de Contenido</a></li>
+            <li><a href="#services">Edición de Video</a></li>
+            <li><a href="#services">Paid Media</a></li>
+            <li><a href="#services">Estrategia Digital</a></li>
+            <li><a href="#services">Branding</a></li>
+          </ul>
+        </div>
+        <div class="ft-col">
+          <h5>Empresa</h5>
+          <ul>
+            <li><a href="#process">Nuestro proceso</a></li>
+            <li><a href="#portfolio">Portafolio</a></li>
+            <li><a href="https://wa.me/message/GZQT5ZVQUQOWP1" target="_blank" rel="noopener">Agendar reunión</a></li>
+            <li><a href="https://wa.me/message/GZQT5ZVQUQOWP1" target="_blank" rel="noopener">Contacto</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="ft-bot">
+      <div class="ft-copy">© 2025 Aurea Media. Todos los derechos reservados.</div>
+      <div class="socials">
+        <a href="https://www.instagram.com/aureamediamx?igsh=emZ5am5ycHI0NXUw" class="soc" title="Instagram" target="_blank" rel="noopener">IG</a>
+        <a href="https://www.tiktok.com/@aurea.media?_r=1&_t=ZS-94igjhgEvTR" class="soc" title="TikTok" target="_blank" rel="noopener">TK</a>
+        <a href="https://www.linkedin.com/company/aurea-media-mx/" class="soc" title="LinkedIn" target="_blank" rel="noopener">in</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════ JS ════════════════════════════════ -->
+<script>
+  /* ── Cursor aura ── */
+  const aura = document.getElementById('cursor-aura');
+  document.addEventListener('mousemove', e => {
+    aura.style.left = e.clientX + 'px';
+    aura.style.top  = e.clientY + 'px';
+  });
+
+  /* ── Sticky nav ── */
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('stuck', window.scrollY > 60);
+  }, { passive: true });
+
+  /* ── Scroll reveal ── */
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        revealObs.unobserve(e.target);   // fire once
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObs.observe(el));
+
+  /* ── Parallax orbs on scroll ── */
+  const orb1 = document.querySelector('.orb-1');
+  const orb2 = document.querySelector('.orb-2');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    orb1.style.transform = `translateY(${y * 0.25}px)`;
+    orb2.style.transform = `translateY(${y * -0.18}px)`;
+  }, { passive: true });
+
+  /* ── Portfolio: hover = preview muted, click = sound on/off ── */
+  document.querySelectorAll('.pf-card').forEach(card => {
+    const vid = card.querySelector('video');
+    if (!vid) return;
+
+    card.addEventListener('mouseenter', () => {
+      vid.muted = true;
+      vid.play().catch(() => {});
+    });
+    card.addEventListener('mouseleave', () => {
+      if (!card.dataset.soundOn) { vid.pause(); vid.currentTime = 0; }
+    });
+    card.addEventListener('click', () => {
+      if (card.dataset.soundOn) {
+        vid.muted = true;
+        delete card.dataset.soundOn;
+        card.querySelector('.snd-badge').style.opacity = '0';
+      } else {
+        vid.muted = false;
+        vid.play().catch(() => {});
+        card.dataset.soundOn = '1';
+        card.querySelector('.snd-badge').style.opacity = '1';
+      }
+    });
+
+    // sound badge
+    const badge = document.createElement('div');
+    badge.className = 'snd-badge';
+    badge.textContent = '🔊';
+    badge.style.cssText = 'position:absolute;top:12px;right:12px;font-size:1rem;opacity:0;transition:opacity .3s;z-index:10;pointer-events:none;';
+    card.appendChild(badge);
+  });
+
+  /* ── Smooth nav link scroll ── */
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
